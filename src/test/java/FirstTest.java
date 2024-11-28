@@ -1,37 +1,24 @@
+import org.openqa.selenium.By;
 import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
-import static org.testng.Assert.assertEquals;
+public class FirstTest extends BaseTest {
 
-public class FirstTest {
-
-    public String trialCode(int number) {
-        if (number % 3 == 0 && number % 5 == 0) {
-            return "EMC";
-        } else if (number % 3 == 0) {
-            return "T";
-        } else if (number % 5 == 0) {
-            return "M";
-        } else return "FAIL";
-    }
-
+@Test
+    public void zipCode4DigestCheck() {
+        browser.get("https://www.sharelane.com/cgi-bin/register.py");
+        browser.findElement(By.name("zip_code")).sendKeys("1234");
+        browser.findElement(By.xpath("//input[@value='Continue']")).click();
+        String errorMessage = browser.findElement(By.cssSelector("[class=error_message]")).getText();
+        assertEquals(errorMessage, "Oops, error on page. ZIP code should have 5 digits");
+}
     @Test
-    public void tmcTest() {
-        String actualResult = trialCode(9);
-        assertEquals(actualResult, "T");
+    public void zipCode5DigestCheck() {
+        browser.get("https://www.sharelane.com/cgi-bin/register.py");
+        browser.findElement(By.name("zip_code")).sendKeys("12345");
+        browser.findElement(By.xpath("//input[@value='Continue']")).click();
+        boolean isPresent = browser.findElement(By.xpath( "//input[@value='Register']")).isDisplayed();
+        assertTrue(isPresent, "Register is not displayed");
     }
-
-    @Test
-    public void tmc2Test() {
-        String actualResult = trialCode(25);
-        assertEquals(actualResult, "M");
-    }
-
-    @Test
-    public void tmc3Test() {
-        String actualResult = trialCode(15);
-        assertEquals(actualResult, "EMC");
-    }
-
-
 }
 

@@ -1,37 +1,30 @@
+import org.openqa.selenium.By;
 import org.testng.annotations.Test;
+import static org.testng.Assert.*;
 
-import static org.testng.Assert.assertEquals;
-
-public class FirstTest {
-
-    public String trialCode(int number) {
-        if (number % 3 == 0 && number % 5 == 0) {
-            return "EMC";
-        } else if (number % 3 == 0) {
-            return "T";
-        } else if (number % 5 == 0) {
-            return "M";
-        } else return "FAIL";
-    }
+public class FirstTest extends BaseTest {
 
     @Test
-    public void tmcTest() {
-        String actualResult = trialCode(9);
-        assertEquals(actualResult, "T");
+    public void NegativeTest() {
+        browser.get("https://www.saucedemo.com/");
+        browser.findElement(By.xpath("//input [@placeholder='Username']")).sendKeys("standard_user");
+        browser.findElement(By.xpath("// input [@type='submit']")).click();
+        String errorMessage = browser.findElement(By.xpath("// h3[@data-test='error']")).getText();
+        assertEquals(errorMessage, "Epic sadface: Password is required");
     }
-
     @Test
-    public void tmc2Test() {
-        String actualResult = trialCode(25);
-        assertEquals(actualResult, "M");
+    public void PositiveTest() {
+        browser.get("https://www.saucedemo.com/");
+        browser.findElement(By.xpath("//input [@placeholder='Username']")).sendKeys("standard_user");
+        browser.findElement(By.xpath("// input [@placeholder='Password']")).sendKeys("secret_sauce");
+        browser.findElement(By.xpath("// input [@type='submit']")).click();
+        boolean isPresent = browser.findElement(By.xpath( "// span[text ()='Products']")).isDisplayed();
+        assertTrue(isPresent, "Products are not visible");
     }
-
-    @Test
-    public void tmc3Test() {
-        String actualResult = trialCode(15);
-        assertEquals(actualResult, "EMC");
-    }
-
-
 }
+
+
+
+
+
 
